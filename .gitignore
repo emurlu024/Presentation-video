@@ -13,3 +13,8 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+# Large presentation videos
+public/pres1.mp4
+src/assets/pres4.mp4
+src/assets/outro.mp4

@@ -1,130 +1,168 @@
-import {Circle, Img, Node, makeScene2D} from '@motion-canvas/2d';
-import {
-  all,
-  createRef,
-  easeInOutCubic,
-  waitFor,
-} from '@motion-canvas/core';
 
-import rightFacingHead from '../assets/pastelGreen-head-profile-leftFacing.png';
-import leftFacingHead from '../assets/pastelGreen-head-profile-rightFacing.png';
+import {makeScene2D, Video, Rect, Img, Txt} from '@motion-canvas/2d';
+import {all, createRef, waitFor, easeInOutCubic, easeOutCubic} from '@motion-canvas/core';
 
 export default makeScene2D(function* (view) {
-  view.fill('#FAFAFF');
+  const video = createRef<Video>();
+  const background = createRef<Rect>();
+  const logo = createRef<Img>();
+  const title = createRef<Txt>();
+  const descriptionStart = createRef<Txt>();
+  const sakura = createRef<Txt>();
+  const andTea = createRef<Txt>();
+  const tea = createRef<Txt>();
+  const therapeutic = createRef<Txt>();
 
-  const world = createRef<Node>();
-  const rightHead = createRef<Img>();
-  const leftHead = createRef<Img>();
-  const blackDots = Array.from({length: 5}, () => createRef<Circle>());
-  const redDots = Array.from({length: 5}, () => createRef<Circle>());
-
-  const blackDotData = [
-    {x: -50, y: -115, size: 41},
-    {x: 45, y: -110, size: 34},
-    {x: -30, y: -30, size: 31},
-    {x: 80, y: -60, size: 29},
-    {x: -130, y: -40, size: 35},
-  ];
-
-  const redDotData = [
-    {x: 50, y: -115, size: 41},
-    {x: -45, y: -110, size: 34},
-    {x: 30, y: -30, size: 31},
-    {x: -80, y: -60, size: 29},
-    {x: 130, y: -40, size: 35},
-  ];
+  const green = '#83B88B';
+  const pink = '#C85D83';
+  const white = '#FFFFFF';
 
   view.add(
-    <Node ref={world}>
-      {/* First head sits on the left side of the first 1920px screen. */}
-      <Node x={-460} y={0} scale={2}>
-        <Img
-          ref={rightHead}
-          src={rightFacingHead}
-          width={520}
-          height={520}
-          x={0}
-          y={20}
-        />
-
-        {blackDotData.map((dot, index) => (
-          <Circle
-            key={`black-dot-${index}`}
-            ref={blackDots[index]}
-            x={dot.x}
-            y={dot.y}
-            size={dot.size}
-            fill={'#343442'}
-            opacity={0}
-          />
-        ))}
-      </Node>
-
-      {/* Second head sits on the right side of the next 1920px screen. */}
-      <Node x={2380} y={0} scale={2}>
-        <Img
-          ref={leftHead}
-          src={leftFacingHead}
-          width={520}
-          height={520}
-          x={0}
-          y={20}
-        />
-
-        {redDotData.map((dot, index) => (
-          <Circle
-            key={`red-dot-${index}`}
-            ref={redDots[index]}
-            x={dot.x}
-            y={dot.y}
-            size={dot.size}
-            fill={'#FF6268'}
-            opacity={0}
-            shadowBlur={index >= 3 ? 35 : 30}
-            shadowColor={'#FF6268'}
-          />
-        ))}
-      </Node>
-    </Node>,
+    <Video
+      ref={video}
+      src={'/pres1.mp4'}
+      width={1920}
+      height={1080}
+      loop={false}
+    />,
   );
 
-  rightHead().opacity(1);
-  leftHead().opacity(1);
-  world().x(0);
+  view.add(
+    <Rect
+      ref={background}
+      width={1920}
+      height={1080}
+      fill={green}
+      opacity={0}
+    />,
+  );
 
-  yield* waitFor(0.5);
+  view.add(
+    <Img
+      ref={logo}
+      src={'/logo.png'}
+      width={700}
+      x={-1350}
+      y={0}
+      opacity={0}
+    />,
+  );
 
+  view.add(
+    <Txt
+      ref={title}
+      text={'Project 茶(Sa)kure-it-all'}
+      fontFamily={'Arial'}
+      fontSize={88}
+      fontWeight={700}
+      fill={white}
+      width={1100}
+      textAlign={'center'}
+      x={1350}
+      y={-280}
+      opacity={0}
+    />,
+  );
+
+  // First description line
+  view.add(
+    <Txt
+      ref={descriptionStart}
+      text={'Improving the Production of'}
+      fontFamily={'Arial'}
+      fontSize={43}
+      fill={white}
+      width={1000}
+      textAlign={'center'}
+      x={300}
+      y={65}
+      opacity={0}
+    />,
+  );
+
+  // Centered second line: Sakura + and + Tea-derived
+  view.add(
+    <Txt
+      ref={sakura}
+      text={'Sakura'}
+      fontFamily={'Arial'}
+      fontSize={40}
+      fontWeight={700}
+      fill={pink}
+      x={130}
+      y={130}
+      opacity={0}
+    />,
+  );
+
+  view.add(
+    <Txt
+      ref={andTea}
+      text={'and'}
+      fontFamily={'Arial'}
+      fontSize={40}
+      fill={white}
+      x={275}
+      y={130}
+      opacity={0}
+    />,
+  );
+
+  view.add(
+    <Txt
+      ref={tea}
+      text={'Tea-derived'}
+      fontFamily={'Arial'}
+      fontSize={40}
+      fontWeight={700}
+      fill={'#245C37'}
+      x={450}
+      y={130}
+      opacity={0}
+    />,
+  );
+
+  // Third description line
+  view.add(
+    <Txt
+      ref={therapeutic}
+      text={'Therapeutic Molecules.'}
+      fontFamily={'Arial'}
+      fontSize={40}
+      fill={white}
+      width={800}
+      textAlign={'center'}
+      x={300}
+      y={190}
+      opacity={0}
+    />,
+  );
+
+  // Start the video and preserve its playback
+  video().play();
+
+  yield* waitFor(34);
+
+  // Fade to the end-card background
+  yield* background().opacity(1, 1.2, easeInOutCubic);
+
+  // Reveal logo and project title
   yield* all(
-    ...blackDots.map((dot, index) => dot().opacity(1, 0.35 + index * 0.1)),
+    logo().x(-520, 1.2, easeOutCubic),
+    logo().opacity(1, 0.8),
+    title().x(300, 1.2, easeOutCubic),
+    title().y(-100, 1.2, easeOutCubic),
+    title().opacity(1, 0.8),
   );
 
-  yield* all(...blackDots.map(dot => dot().scale(1.25, 0.3)));
-  yield* all(...blackDots.map(dot => dot().scale(1, 0.25)));
-  yield* waitFor(0.4);
-
+  // Reveal the description
   yield* all(
-    ...blackDots.map(dot => dot().scale(0, 0.7, easeInOutCubic)),
-    ...blackDots.map(dot => dot().opacity(0, 0.6)),
+    descriptionStart().opacity(1, 0.7, easeInOutCubic),
+    sakura().opacity(1, 0.7, easeInOutCubic),
+    andTea().opacity(1, 0.7, easeInOutCubic),
+    tea().opacity(1, 0.7, easeInOutCubic),
+    therapeutic().opacity(1, 0.7, easeInOutCubic),
   );
 
-  // Pan to the next screen; the second head lands on its right side.
-  yield* world().x(-1920, 1.5, easeInOutCubic);
-  yield* waitFor(0.3);
-
-  yield* all(
-    ...redDots.map((dot, index) => dot().opacity(1, 0.35 + index * 0.1)),
-  );
-
-  yield* all(...redDots.map(dot => dot().scale(1.4, 0.35)));
-  yield* all(...redDots.map(dot => dot().scale(1, 0.3)));
-  yield* all(...redDots.map(dot => dot().scale(1.3, 0.3)));
-  yield* all(...redDots.map(dot => dot().scale(1, 0.25)));
-  yield* waitFor(0.3);
-
-  yield* all(
-    ...redDots.map(dot => dot().scale(0, 0.8, easeInOutCubic)),
-    ...redDots.map(dot => dot().opacity(0, 0.7)),
-  );
-
-  yield* waitFor(0.8);
+  yield* waitFor(5);
 });

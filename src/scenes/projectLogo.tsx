@@ -1,3 +1,4 @@
+
 import { Circle, Img, Node, Rect, Video, makeScene2D } from "@motion-canvas/2d";
 import {
   all,
@@ -94,6 +95,9 @@ export default makeScene2D(function* (view) {
   );
 
   video().play();
+
+  // Wait 8 seconds before starting the entire animation.
+  yield* waitFor(6);
 
   // Preserve the original falling path exactly; the later transition time
   // simply gives this same route more time and therefore slows it down.
